@@ -4,12 +4,12 @@ import './Header.css';
 
 const Header = () => {
   return (
-    <header className="header">
-      <div className="container">
+    <div className="header">
+      <div className="header-container">
         <Link to="/" className="logo">
           Video Explorer
         </Link>
-        <nav>
+        <nav className="nav-menu">
           <ul>
             <li>
               <Link to="/">Home</Link>
@@ -17,7 +17,7 @@ const Header = () => {
           </ul>
         </nav>
       </div>
-    </header>
+    </div>
   );
 };
 

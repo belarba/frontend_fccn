@@ -6,6 +6,7 @@ import ViewModeFilter from '../components/Filters/ViewModeFilter';
 import VideoList from '../components/VideoList/VideoList';
 import Pagination from '../components/Pagination/Pagination';
 import useVideos from '../hooks/useVideos';
+import './HomePage.css';
 
 const HomePage = () => {
   // Estado para o modo de visualização (grade ou lista)
@@ -47,38 +48,50 @@ const HomePage = () => {
   };
 
   return (
-    <div className="home-page">
-      <Header />
+    <div className="page-wrapper">
+      <header className="app-header">
+        <Header />
+      </header>
       
-      <main className="container">
-        <SearchBar 
-          onSearch={handleSearch} 
-          initialQuery={searchParams.query} 
-        />
-        
-        <div className="filters-container">
-          <ResolutionFilter 
-            value={searchParams.size} 
-            onChange={handleResolutionChange} 
-          />
-          <ViewModeFilter 
-            isGridView={isGridView} 
-            onChange={handleViewModeChange} 
-          />
+      <main className="main-content">
+        <div className="container">
+          <div className="search-section">
+            <SearchBar 
+              onSearch={handleSearch} 
+              initialQuery={searchParams.query} 
+            />
+          </div>
+          
+          <div className="filters-section">
+            <div className="filters-container">
+              <ResolutionFilter 
+                value={searchParams.size} 
+                onChange={handleResolutionChange} 
+              />
+              <ViewModeFilter 
+                isGridView={isGridView} 
+                onChange={handleViewModeChange} 
+              />
+            </div>
+          </div>
+          
+          <div className="videos-section">
+            <VideoList 
+              videos={videos} 
+              loading={loading} 
+              error={error} 
+              gridView={isGridView} 
+            />
+          </div>
+          
+          <div className="pagination-section">
+            <Pagination 
+              currentPage={pagination.page} 
+              totalPages={pagination.total_pages} 
+              onPageChange={handlePageChange} 
+            />
+          </div>
         </div>
-        
-        <VideoList 
-          videos={videos} 
-          loading={loading} 
-          error={error} 
-          gridView={isGridView} 
-        />
-        
-        <Pagination 
-          currentPage={pagination.page} 
-          totalPages={pagination.total_pages} 
-          onPageChange={handlePageChange} 
-        />
       </main>
     </div>
   );

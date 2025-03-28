@@ -14,18 +14,29 @@ body {
   background-color: #f0f2f5;
   color: #333;
   line-height: 1.6;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
 }
 
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
-}
-
-.app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  width: 100%;
 }
 
 .loading-container {
@@ -36,6 +47,7 @@ body {
   background-color: #f8f9fa;
   border-radius: 8px;
   margin: 2rem 0;
+  width: 100%;
 }
 
 .error-container {
@@ -49,4 +61,5 @@ body {
   margin: 2rem 0;
   padding: 1rem;
   text-align: center;
+  width: 100%;
 }
