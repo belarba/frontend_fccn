@@ -12,7 +12,6 @@ const useVideos = (initialParams = {}) => {
   });
   const [searchParams, setSearchParams] = useState({
     query: '',
-    locale: '',
     size: '',
     ...initialParams
   });

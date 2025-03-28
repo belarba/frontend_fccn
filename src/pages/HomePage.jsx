@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header/Header';
 import SearchBar from '../components/SearchBar/SearchBar';
-import LocaleFilter from '../components/Filters/LocaleFilter';
 import ResolutionFilter from '../components/Filters/ResolutionFilter';
 import ViewModeFilter from '../components/Filters/ViewModeFilter';
 import VideoList from '../components/VideoList/VideoList';
@@ -27,11 +26,6 @@ const HomePage = () => {
   // Handler para pesquisa
   const handleSearch = (query) => {
     updateSearchParams({ query });
-  };
-
-  // Handler para filtro de localidade
-  const handleLocaleChange = (locale) => {
-    updateSearchParams({ locale });
   };
 
   // Handler para filtro de resolução
@@ -63,10 +57,6 @@ const HomePage = () => {
         />
         
         <div className="filters-container">
-          <LocaleFilter 
-            value={searchParams.locale} 
-            onChange={handleLocaleChange} 
-          />
           <ResolutionFilter 
             value={searchParams.size} 
             onChange={handleResolutionChange} 
