@@ -1,0 +1,149 @@
+/* Estilo do container principal */
+.video-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+/* Layout em grade (4 colunas) */
+.video-list.grid-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+/* Layout em lista (1 coluna) */
+.video-list.list-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Estilo para cada item de vídeo */
+.video-item {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.video-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.video-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+/* Thumbnail do vídeo */
+.video-thumbnail {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+}
+
+/* Informações do vídeo */
+.video-info {
+  padding: 1rem;
+}
+
+.video-title {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+  color: #2c3e50;
+}
+
+.video-author {
+  margin: 0 0 0.5rem;
+  font-size: 0.875rem;
+  color: #7f8c8d;
+}
+
+.video-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: #95a5a6;
+  margin: 0;
+}
+
+/* Estilos específicos para visualização em lista */
+.video-item.list-view {
+  max-width: 100%;
+}
+
+.video-item.list-view .video-link {
+  display: flex;
+  align-items: center;
+}
+
+.video-item.list-view .video-thumbnail {
+  width: 240px;
+  flex-shrink: 0;
+}
+
+.video-item.list-view .video-info {
+  flex: 1;
+}
+
+/* Mensagens (carregando, erro, vazio) */
+.video-list-message {
+  width: 100%;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.video-list-message.error {
+  background-color: #fee;
+  color: #e74c3c;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .video-list.grid-layout {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .video-list.grid-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .video-item.list-view .video-link {
+    flex-direction: column;
+  }
+  
+  .video-item.list-view .video-thumbnail {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .video-list.grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
