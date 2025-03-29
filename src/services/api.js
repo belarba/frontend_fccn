@@ -23,22 +23,13 @@ export const fetchVideos = async (params = {}) => {
   }
 };
 
-// Função para buscar um vídeo específico por ID (se necessário)
+// Função para buscar um vídeo específico por ID
 export const fetchVideoById = async (id) => {
   try {
-    // Como a API não tem um endpoint específico para um vídeo, 
-    // podemos simular buscando todos os vídeos e filtrando pelo ID
-    const response = await api.get('/videos', { 
-      params: { 
-        query: id, // Pode não ser ideal, mas é uma forma de tentar encontrar o vídeo
-        per_page: 20 
-      } 
-    });
-    
-    const video = response.data.items.find(item => item.id === parseInt(id, 10));
-    return video || null;
+    const response = await api.get(`/videos/${id}`);
+    return response.data;
   } catch (error) {
-    console.error('Erro ao buscar vídeo por ID:', error);
+    console.error(`Erro ao buscar vídeo ${id}:`, error);
     throw error;
   }
 };

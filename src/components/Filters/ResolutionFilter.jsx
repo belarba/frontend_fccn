@@ -10,22 +10,23 @@ const resolutionOptions = [
 ];
 
 const ResolutionFilter = ({ value, onChange }) => {
+  const handleChange = (e) => {
+    onChange(e.target.value);
+  };
+
   return (
-    <div className="filter-container">
-      <label htmlFor="resolution-filter">Resolução:</label>
-      <select
-        id="resolution-filter"
-        className="filter-select"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-      >
-        {resolutionOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <select
+      className="resolution-select"
+      value={value}
+      onChange={handleChange}
+      aria-label="Filtrar por resolução"
+    >
+      {resolutionOptions.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
   );
 };
 

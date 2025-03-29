@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header/Header';
 import SearchBar from '../components/SearchBar/SearchBar';
-import ResolutionFilter from '../components/Filters/ResolutionFilter';
 import ViewModeFilter from '../components/Filters/ViewModeFilter';
 import VideoList from '../components/VideoList/VideoList';
 import Pagination from '../components/Pagination/Pagination';
@@ -31,6 +30,7 @@ const HomePage = () => {
 
   // Handler para filtro de resolução
   const handleResolutionChange = (size) => {
+    // Atualize o estado sem recarregar a página
     updateSearchParams({ size });
   };
 
@@ -58,16 +58,14 @@ const HomePage = () => {
           <div className="search-section">
             <SearchBar 
               onSearch={handleSearch} 
-              initialQuery={searchParams.query} 
+              initialQuery={searchParams.query}
+              resolution={searchParams.size}
+              onResolutionChange={handleResolutionChange}
             />
           </div>
           
-          <div className="filters-section">
-            <div className="filters-container">
-              <ResolutionFilter 
-                value={searchParams.size} 
-                onChange={handleResolutionChange} 
-              />
+          <div className="view-options-section">
+            <div className="view-options-container">
               <ViewModeFilter 
                 isGridView={isGridView} 
                 onChange={handleViewModeChange} 

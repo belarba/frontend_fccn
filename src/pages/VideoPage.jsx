@@ -1,54 +1,129 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React from 'react';
+import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header/Header';
-import VideoDetail from '../components/VideoDetail/VideoDetail';
-import { fetchVideoById } from '../services/api';
+import useVideoDetail from '../hooks/useVideoDetail';
+import { useIsMobile } from '../hooks/useMediaQuery';
+import './VideoPage.css';
+
+const formatDuration = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = seconds % 60;
+  return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
 
 const VideoPage = () => {
   const { id } = useParams();
-  const [video, setVideo] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadVideo = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const videoData = await fetchVideoById(parseInt(id, 10));
-        
-        if (!videoData) {
-          setError('Vídeo não encontrado');
-        } else {
-          setVideo(videoData);
-        }
-      } catch (err) {
-        setError(err.message || 'Erro ao carregar o vídeo');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadVideo();
-  }, [id]);
-
+  const { video, loading, error, getBestVideoFile } = useVideoDetail(id);
+  const isMobile = useIsMobile();
+  
+  // Selecionar o arquivo de vídeo apropriado para o dispositivo atual
+  const videoFile = video ? getBestVideoFile() : null;
+  
   return (
-    <div className="video-page">
-      <Header />
+    <div className="page-wrapper">
+      <header className="app-header">
+        <Header />
+      </header>
       
-      <main className="container">
-        {loading ? (
-          <div className="loading-container">
-            <p>Carregando vídeo...</p>
+      <main className="main-content">
+        <div className="container">
+          <div className="video-detail-container">
+            {loading ? (
+              <div className="loading-container">
+                <p>Carregando vídeo...</p>
+              </div>
+            ) : error ? (
+              <div className="error-container">
+                <p>{error}</p>
+                <Link to="/" className="back-link">Voltar para a galeria</Link>
+              </div>
+            ) : (
+              <>
+                <Link to="/" className="back-link">
+                  &laquo; Voltar para a galeria
+                </Link>
+                
+                <div className="video-player-container">
+                  {videoFile ? (
+                    <video 
+                      controls 
+                      autoPlay={false}
+                      className="video-player"
+                      poster={video.video_pictures[0]}
+                    >
+                      <source src={videoFile.link} type={videoFile.file_type || 'video/mp4'} />
+                      Seu navegador não suporta a reprodução de vídeos.
+                    </video>
+                  ) : (
+                    <div className="video-error">
+                      <p>Não foi possível carregar o vídeo.</p>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="video-detail-info">
+                  <div className="video-detail-header">
+                    <h1 className="video-detail-title">Vídeo #{video.id}</h1>
+                  </div>
+                  
+                  <div className="video-detail-metadata">
+                    <div className="metadata-row">
+                      <div className="metadata-item">
+                        <span className="metadata-label">Autor:</span>
+                        <span className="metadata-value">{video.user.name}</span>
+                      </div>
+                      
+                      <div className="metadata-item">
+                        <span className="metadata-label">ID:</span>
+                        <span className="metadata-value">{video.id}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="metadata-row">
+                      <div className="metadata-item">
+                        <span className="metadata-label">Resolução:</span>
+                        <span className="metadata-value">{video.resolution}</span>
+                      </div>
+                      
+                      <div className="metadata-item">
+                        <span className="metadata-label">Duração:</span>
+                        <span className="metadata-value">{formatDuration(video.duration)}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="metadata-row">
+                      <div className="metadata-item">
+                        <span className="metadata-label">Dimensões:</span>
+                        <span className="metadata-value">{video.width}x{video.height}</span>
+                      </div>
+                      
+                      <div className="metadata-item">
+                        <span className="metadata-label">Qualidade:</span>
+                        <span className="metadata-value">
+                          {isMobile ? 'SD (Otimizado para Mobile)' : 'HD (Desktop)'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="metadata-row full-width">
+                      <div className="metadata-item">
+                        <span className="metadata-label">Fonte:</span>
+                        <a 
+                          href={video.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="metadata-link"
+                        >
+                          Ver no Pexels
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
-        ) : error ? (
-          <div className="error-container">
-            <p>{error}</p>
-          </div>
-        ) : (
-          <VideoDetail video={video} />
-        )}
+        </div>
       </main>
     </div>
   );
