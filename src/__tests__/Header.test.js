@@ -6,7 +6,10 @@ import Header from '../components/Header/Header';
 describe('Header Component', () => {
   test('renderiza o logo e campo de busca', () => {
     render(
-      <BrowserRouter>
+      <BrowserRouter future={{ 
+        v7_startTransition: true,
+        v7_relativeSplatPath: true 
+      }}>
         <Header />
       </BrowserRouter>
     );

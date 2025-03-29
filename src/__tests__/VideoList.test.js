@@ -19,7 +19,10 @@ const mockVideos = [
 ];
 
 const VideoListWithRouter = (props) => (
-  <BrowserRouter>
+  <BrowserRouter future={{ 
+    v7_startTransition: true,
+    v7_relativeSplatPath: true
+  }}>
     <VideoList {...props} />
   </BrowserRouter>
 );
