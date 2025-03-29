@@ -111,6 +111,11 @@
 }
 
 @media (max-width: 768px) {
+  .filters-overlay {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+  }
+
   .filters-container {
     flex-direction: column;
     align-items: flex-start;
