@@ -8,10 +8,10 @@ import useVideos from '../hooks/useVideos';
 import './HomePage.css';
 
 const HomePage = () => {
-  // Estado para o modo de visualização (grade ou lista)
   const [isGridView, setIsGridView] = useState(true);
   
-  // Hook personalizado para gerenciar os vídeos e filtragem
+  const [localResolution, setLocalResolution] = useState('');
+  
   const {
     videos,
     loading,
@@ -23,27 +23,25 @@ const HomePage = () => {
     goToPage
   } = useVideos();
 
-  // Handler para pesquisa
   const handleSearch = (query) => {
-    updateSearchParams({ query });
+    updateSearchParams({ 
+      query,
+      size: localResolution
+    });
   };
 
-  // Handler para filtro de resolução
   const handleResolutionChange = (size) => {
-    // Atualize o estado sem recarregar a página
-    updateSearchParams({ size });
+    // Apenas atualize o estado local, NÃO faça uma busca
+    setLocalResolution(size);
   };
 
-  // Handler para modo de visualização
   const handleViewModeChange = (gridView) => {
     setIsGridView(gridView);
     setViewMode(gridView);
   };
 
-  // Handler para mudança de página
   const handlePageChange = (page) => {
     goToPage(page);
-    // Scroll para o topo da página
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -59,7 +57,7 @@ const HomePage = () => {
             <SearchBar 
               onSearch={handleSearch} 
               initialQuery={searchParams.query}
-              resolution={searchParams.size}
+              resolution={localResolution || searchParams.size}
               onResolutionChange={handleResolutionChange}
             />
           </div>

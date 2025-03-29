@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import useVideoDetail from '../hooks/useVideoDetail';
@@ -13,11 +13,45 @@ const formatDuration = (seconds) => {
 
 const VideoPage = () => {
   const { id } = useParams();
-  const { video, loading, error, getBestVideoFile } = useVideoDetail(id);
+  const { 
+    video, 
+    loading, 
+    error, 
+    selectedQuality, 
+    setSelectedQuality,
+    getSelectedVideoFile,
+    getAvailableQualities,
+    getSelectedResolution
+  } = useVideoDetail(id);
   const isMobile = useIsMobile();
+  const videoRef = useRef(null);
   
-  // Selecionar o arquivo de vídeo apropriado para o dispositivo atual
-  const videoFile = video ? getBestVideoFile() : null;
+  const videoFile = video ? getSelectedVideoFile() : null;
+  
+  const availableQualities = video ? getAvailableQualities() : [];
+
+  const selectedResolution = video ? getSelectedResolution() : '';
+
+  useEffect(() => {
+    if (videoRef.current) {
+      const currentTime = videoRef.current.currentTime;
+      const wasPlaying = !videoRef.current.paused;
+      
+      const handleLoadedData = () => {
+        videoRef.current.currentTime = currentTime;
+        if (wasPlaying) {
+          videoRef.current.play().catch(e => console.error('Erro ao reproduzir vídeo:', e));
+        }
+        videoRef.current.removeEventListener('loadeddata', handleLoadedData);
+      };
+      
+      videoRef.current.addEventListener('loadeddata', handleLoadedData);
+    }
+  }, [selectedQuality]);
+
+  const handleQualityChange = (e) => {
+    setSelectedQuality(e.target.value);
+  };
   
   return (
     <div className="page-wrapper">
@@ -45,15 +79,33 @@ const VideoPage = () => {
                 
                 <div className="video-player-container">
                   {videoFile ? (
-                    <video 
-                      controls 
-                      autoPlay={false}
-                      className="video-player"
-                      poster={video.video_pictures[0]}
-                    >
-                      <source src={videoFile.link} type={videoFile.file_type || 'video/mp4'} />
-                      Seu navegador não suporta a reprodução de vídeos.
-                    </video>
+                    <>
+                      <video 
+                        ref={videoRef}
+                        controls 
+                        autoPlay={false}
+                        className="video-player"
+                        poster={video.video_pictures?.[0]?.picture}
+                        key={videoFile.link} // Key muda quando a fonte muda, forçando recriação
+                      >
+                        <source src={videoFile.link} type={videoFile.file_type || 'video/mp4'} />
+                        Seu navegador não suporta a reprodução de vídeos.
+                      </video>
+                      
+                      <div className="video-quality-selector">
+                        <select 
+                          value={selectedQuality} 
+                          onChange={handleQualityChange}
+                          className="quality-select"
+                        >
+                          {availableQualities.map(quality => (
+                            <option key={quality.value} value={quality.value}>
+                              {quality.label} ({quality.count} {quality.count === 1 ? 'opção' : 'opções'})
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </>
                   ) : (
                     <div className="video-error">
                       <p>Não foi possível carregar o vídeo.</p>
@@ -81,26 +133,28 @@ const VideoPage = () => {
                     
                     <div className="metadata-row">
                       <div className="metadata-item">
-                        <span className="metadata-label">Resolução:</span>
-                        <span className="metadata-value">{video.resolution}</span>
+                        <span className="metadata-label">Resolução atual:</span>
+                        <span className="metadata-value">{selectedResolution}</span>
                       </div>
                       
                       <div className="metadata-item">
-                        <span className="metadata-label">Duração:</span>
-                        <span className="metadata-value">{formatDuration(video.duration)}</span>
+                        <span className="metadata-label">Dimensões:</span>
+                        <span className="metadata-value">
+                          {videoFile ? `${videoFile.width}x${videoFile.height}` : 'N/A'}
+                        </span>
                       </div>
                     </div>
                     
                     <div className="metadata-row">
                       <div className="metadata-item">
-                        <span className="metadata-label">Dimensões:</span>
-                        <span className="metadata-value">{video.width}x{video.height}</span>
+                        <span className="metadata-label">Duração:</span>
+                        <span className="metadata-value">{formatDuration(video.duration)}</span>
                       </div>
                       
                       <div className="metadata-item">
-                        <span className="metadata-label">Qualidade:</span>
+                        <span className="metadata-label">Formato:</span>
                         <span className="metadata-value">
-                          {isMobile ? 'SD (Otimizado para Mobile)' : 'HD (Desktop)'}
+                          {videoFile ? videoFile.file_type : 'N/A'}
                         </span>
                       </div>
                     </div>

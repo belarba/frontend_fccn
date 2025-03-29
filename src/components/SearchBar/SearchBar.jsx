@@ -10,31 +10,46 @@ const SearchBar = ({ onSearch, initialQuery = '', resolution, onResolutionChange
     onSearch(query);
   };
 
+  const handleResolutionChange = (value) => {
+    if (onResolutionChange) {
+      onResolutionChange(value);
+    }
+  };
+
   return (
     <div className="search-bar">
-      <form onSubmit={handleSubmit}>
-        <div className="search-input-container">
-          <div className="search-field">
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Buscar vídeos..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-            />
-            <button type="submit" className="search-button">
-              Buscar
-            </button>
-          </div>
-          
-          <div className="search-filter">
-            <ResolutionFilter 
-              value={resolution} 
-              onChange={onResolutionChange} 
-            />
-          </div>
+      <div className="search-input-container">
+        <div className="search-field">
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Buscar vídeos..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                onSearch(query);
+              }
+            }}
+          />
         </div>
-      </form>
+        
+        <div className="search-filter">
+          <ResolutionFilter 
+            value={resolution} 
+            onChange={handleResolutionChange} 
+          />
+        </div>
+        
+        <button 
+          type="button" 
+          className="search-button"
+          onClick={() => onSearch(query)}
+        >
+          Buscar
+        </button>
+      </div>
     </div>
   );
 };
