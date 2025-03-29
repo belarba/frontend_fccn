@@ -16,10 +16,10 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       // Se houver muitas páginas, mostrar algumas com elipses
       if (currentPage <= 3) {
         // Caso esteja nas primeiras páginas
-        pages = [1, 2, 3, 4, '...', totalPages];
+        pages = [1, 2, 3, '...', totalPages];
       } else if (currentPage >= totalPages - 2) {
         // Caso esteja nas últimas páginas
-        pages = [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+        pages = [1, '...', totalPages - 2, totalPages - 1, totalPages];
       } else {
         // Caso esteja no meio
         pages = [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
@@ -38,7 +38,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
       >
-        &laquo; Anterior
+        Anterior
       </button>
       
       <div className="pagination-numbers">
@@ -63,12 +63,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
       >
-        Próxima &raquo;
+        Próxima
       </button>
-      
-      <div className="pagination-info">
-        Página {currentPage} de {totalPages}
-      </div>
     </div>
   );
 };

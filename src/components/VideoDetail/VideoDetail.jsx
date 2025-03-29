@@ -69,7 +69,7 @@ const VideoDetail = ({ video }) => {
             controls 
             autoPlay={false}
             className="video-player"
-            poster={video.video_pictures?.[0]}
+            poster={video.video_pictures?.[0]?.picture}
           >
             <source src={videoFile.link} type="video/mp4" />
             Seu navegador não suporta a reprodução de vídeos.
@@ -82,36 +82,19 @@ const VideoDetail = ({ video }) => {
       </div>
       
       <div className="video-detail-info">
-        <div className="video-detail-header">
-          <h1 className="video-detail-title">Vídeo #{video.id}</h1>
-        </div>
+        <h1 className="video-detail-title">Nome do autor</h1>
         
-        <div className="video-detail-metadata">
-          <div className="metadata-item">
-            <span className="metadata-label">Autor:</span>
-            <span className="metadata-value">{video.user_name}</span>
-          </div>
-          
-          <div className="metadata-item">
-            <span className="metadata-label">ID:</span>
-            <span className="metadata-value">{video.id}</span>
-          </div>
-          
-          <div className="metadata-item">
-            <span className="metadata-label">Resolução:</span>
-            <span className="metadata-value">{resolution}</span>
-          </div>
-          
-          <div className="metadata-item">
-            <span className="metadata-label">Duração:</span>
-            <span className="metadata-value">{formatDuration(video.duration)}</span>
-          </div>
-          
-          <div className="metadata-item">
-            <span className="metadata-label">Dimensões:</span>
-            <span className="metadata-value">{video.width}x{video.height}</span>
-          </div>
-        </div>
+        <ul className="video-metadata-list">
+          <li className="video-metadata-item">
+            <strong>ID:</strong> {video.id}
+          </li>
+          <li className="video-metadata-item">
+            <strong>Resolução:</strong> {resolution}
+          </li>
+          <li className="video-metadata-item">
+            <strong>Duração:</strong> {formatDuration(video.duration)}
+          </li>
+        </ul>
       </div>
     </div>
   );

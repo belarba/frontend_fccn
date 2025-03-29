@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Header from '../components/Header/Header';
-import SearchBar from '../components/SearchBar/SearchBar';
+import FilterComponent from '../components/Filters/FilterComponent';
 import ViewModeFilter from '../components/Filters/ViewModeFilter';
 import VideoList from '../components/VideoList/VideoList';
 import Pagination from '../components/Pagination/Pagination';
@@ -9,8 +9,10 @@ import './HomePage.css';
 
 const HomePage = () => {
   const [isGridView, setIsGridView] = useState(true);
-  
+  const [showFilters, setShowFilters] = useState(false);
   const [localResolution, setLocalResolution] = useState('');
+  const filterRef = useRef(null);
+  const filterButtonRef = useRef(null);
   
   const {
     videos,
@@ -28,11 +30,19 @@ const HomePage = () => {
       query,
       size: localResolution
     });
+    setShowFilters(false); // Fechar o filtro ao fazer uma busca
+  };
+
+  const handleToggleFilters = () => {
+    setShowFilters(!showFilters);
   };
 
   const handleResolutionChange = (size) => {
-    // Apenas atualize o estado local, NÃO faça uma busca
     setLocalResolution(size);
+    updateSearchParams({
+      ...searchParams,
+      size
+    });
   };
 
   const handleViewModeChange = (gridView) => {
@@ -45,25 +55,54 @@ const HomePage = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Fechar os filtros apenas quando clicar fora, excluindo o botão de filtro
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Não fechar se clicar no painel de filtros ou no botão de filtro
+      const isFilterButtonClick = filterButtonRef.current && 
+                                 filterButtonRef.current.contains(event.target);
+      
+      const isFilterPanelClick = filterRef.current && 
+                               filterRef.current.contains(event.target);
+      
+      if (!isFilterButtonClick && !isFilterPanelClick) {
+        setShowFilters(false);
+      }
+    };
+    
+    // Só adicione o event listener se os filtros estiverem visíveis
+    if (showFilters) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showFilters]);
+
   return (
     <div className="page-wrapper">
       <header className="app-header">
-        <Header />
+        <Header 
+          onSearch={handleSearch} 
+          onToggleFilters={handleToggleFilters}
+          filterButtonRef={filterButtonRef}
+        />
+        
+        {showFilters && (
+          <div className="filters-overlay" ref={filterRef}>
+            <FilterComponent 
+              resolution={localResolution}
+              onResolutionChange={handleResolutionChange}
+            />
+          </div>
+        )}
       </header>
       
       <main className="main-content">
         <div className="container">
-          <div className="search-section">
-            <SearchBar 
-              onSearch={handleSearch} 
-              initialQuery={searchParams.query}
-              resolution={localResolution || searchParams.size}
-              onResolutionChange={handleResolutionChange}
-            />
-          </div>
-          
-          <div className="view-options-section">
-            <div className="view-options-container">
+          <div className="videos-toolbar">
+            <div className="view-mode-container">
               <ViewModeFilter 
                 isGridView={isGridView} 
                 onChange={handleViewModeChange} 

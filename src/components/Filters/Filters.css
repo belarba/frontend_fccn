@@ -1,81 +1,122 @@
-.filters-container {
+.filters-overlay {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 4px;
+  justify-content: center;
+  z-index: 100;
+  padding-top: 0.5rem;
 }
 
-.filter-container {
+.filters-container {
   display: flex;
   align-items: center;
+  gap: 1rem;
+  background-color: #E5E5E5;
+  border-radius: 2px;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.filter-category-title {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+.filter-options {
+  display: flex;
   gap: 0.5rem;
 }
 
-.resolution-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  background-color: white;
-  font-size: 1rem;
+.filter-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 0.7rem center;
-  background-size: 1em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+  background-color: #ccc;
+  color: #333;
+  font-size: 0.85rem;
 }
 
-.resolution-select:focus {
-  outline: none;
-  border-color: #3498db;
+.filter-checkbox-label.active {
+  background-color: #4AA081;
+  color: #fff;
+}
+
+.filter-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.filter-checkbox-custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  background-color: transparent;
+  border: 2px solid #666;
+  border-radius: 2px;
+}
+
+.filter-checkbox:checked ~ .filter-checkbox-custom {
+  background-color: #4AA081;
+  border-color: #4AA081;
+}
+
+.filter-checkbox:checked ~ .filter-checkbox-custom::after {
+  content: '';
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-top: -2px;
 }
 
 /* Estilo para os botões de modo de visualização */
-.view-mode-filter {
-  margin-left: auto;
-}
-
 .view-mode-buttons {
   display: flex;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
+  gap: 0.5rem;
 }
 
 .view-mode-button {
-  background-color: white;
+  background-color: transparent;
   border: none;
-  padding: 0.5rem 0.75rem;
   cursor: pointer;
-  transition: background-color 0.2s;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
 }
 
 .view-mode-button:hover {
-  background-color: #f0f0f0;
+  color: #fff;
 }
 
 .view-mode-button.active {
-  background-color: #3498db;
-  color: white;
-}
-
-.grid-icon, .list-icon {
-  font-style: normal;
-  font-size: 1.25rem;
+  color: #4AA081;
 }
 
 @media (max-width: 768px) {
   .filters-container {
     flex-direction: column;
-    align-items: stretch;
+    align-items: flex-start;
   }
   
-  .view-mode-filter {
-    margin-left: 0;
-    justify-content: flex-end;
+  .filter-options {
+    margin-top: 0.5rem;
   }
 }

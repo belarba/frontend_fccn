@@ -3,6 +3,7 @@
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
+  background-color: #0F0F0F;
 }
 
 .app-header {
@@ -26,87 +27,24 @@
   width: 100%;
 }
 
-.search-section {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-
-.filters-section {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-
-.videos-section {
-  margin-bottom: 2rem;
-  width: 100%;
-}
-
-.pagination-section {
-  margin-top: 2rem;
-  width: 100%;
-}
-
-/* Responsiveness */
-@media (max-width: 768px) {
-  .main-content {
-    padding: 0.5rem 0;
-  }
-  
-  .container {
-    padding: 0 0.5rem;
-  }
-  
-  .search-section,
-  .filters-section,
-  .videos-section,
-  .pagination-section {
-    margin-bottom: 1rem;
-  }
-  
-  .pagination-section {
-    margin-top: 1rem;
-  }
-}.page-wrapper {
+.filter-section {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  width: 100%;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-.app-header {
-  width: 100%;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-
-.main-content {
-  flex: 1;
-  padding: 1rem 0;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.search-section {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-
-.view-options-section {
-  margin-bottom: 1.5rem;
-  width: 100%;
-}
-
-.view-options-container {
+.videos-toolbar {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.view-mode-container {
+  display: flex;
+  align-items: center;
 }
 
 .videos-section {
@@ -129,8 +67,8 @@
     padding: 0 0.5rem;
   }
   
-  .search-section,
-  .view-options-section,
+  .filter-section,
+  .videos-toolbar,
   .videos-section,
   .pagination-section {
     margin-bottom: 1rem;

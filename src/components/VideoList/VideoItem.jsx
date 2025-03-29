@@ -21,15 +21,14 @@ const VideoItem = ({ video, gridView }) => {
       <Link to={`/video/${id}`} className="video-link">
         <div className="video-thumbnail">
           <img src={thumbnail} alt={`Vídeo de ${user_name}`} />
-          <span className="video-duration">{formatDuration(duration)}</span>
+          <div className="video-play-icon"></div>
         </div>
         <div className="video-info">
-          <h3 className="video-title">Vídeo #{id}</h3>
-          <p className="video-author">Por {user_name}</p>
-          <p className="video-meta">
-            <span>ID: {id}</span>
-            <span>Duração: {formatDuration(duration)}</span>
-          </p>
+          <h3 className="video-title">{user_name}</h3>
+          <div className="video-meta">
+            <span className="video-meta-item">ID: {id}</span>
+            <span className="video-meta-item">Duração: {formatDuration(duration)}</span>
+          </div>
         </div>
       </Link>
     </div>
