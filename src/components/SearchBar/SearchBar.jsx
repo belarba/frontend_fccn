@@ -5,15 +5,15 @@ import './SearchBar.css';
 const SearchBar = ({ onSearch, initialQuery = '', resolution, onResolutionChange }) => {
   const [query, setQuery] = useState(initialQuery);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSearch(query);
-  };
-
   const handleResolutionChange = (value) => {
     if (onResolutionChange) {
       onResolutionChange(value);
     }
+  };
+
+  // Função para lidar com a busca
+  const executeSearch = () => {
+    onSearch(query);
   };
 
   return (
@@ -29,7 +29,7 @@ const SearchBar = ({ onSearch, initialQuery = '', resolution, onResolutionChange
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 e.preventDefault();
-                onSearch(query);
+                executeSearch();
               }
             }}
           />
@@ -45,7 +45,7 @@ const SearchBar = ({ onSearch, initialQuery = '', resolution, onResolutionChange
         <button 
           type="button" 
           className="search-button"
-          onClick={() => onSearch(query)}
+          onClick={executeSearch}
         >
           Buscar
         </button>
