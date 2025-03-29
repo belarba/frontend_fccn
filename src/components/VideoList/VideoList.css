@@ -30,6 +30,11 @@
   transform: translateY(-3px);
 }
 
+.video-item.grid-view {
+  display: flex;
+  flex-direction: column;
+}
+
 .video-link {
   text-decoration: none;
   color: inherit;

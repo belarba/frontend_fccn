@@ -23,13 +23,15 @@ const VideoItem = ({ video, gridView }) => {
           <img src={thumbnail} alt={`Vídeo de ${user_name}`} />
           <div className="video-play-icon"></div>
         </div>
-        <div className="video-info">
-          <h3 className="video-title">{user_name}</h3>
-          <div className="video-meta">
-            <span className="video-meta-item">ID: {id}</span>
-            <span className="video-meta-item">Duração: {formatDuration(duration)}</span>
+        {!gridView && (
+          <div className="video-info">
+            <h3 className="video-title">{user_name}</h3>
+            <div className="video-meta">
+              <span className="video-meta-item">ID: {id}</span>
+              <span className="video-meta-item">Duração: {formatDuration(duration)}</span>
+            </div>
           </div>
-        </div>
+        )}
       </Link>
     </div>
   );
