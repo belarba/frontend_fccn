@@ -1,70 +1,195 @@
-# Getting Started with Create React App
+# Frontend Video Viewer
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Esta aplicação React permite visualizar e pesquisar vídeos da API Pexels, oferecendo uma interface moderna e responsiva para navegação, filtragem e reprodução de vídeos.
 
-## Available Scripts
+## Tecnologias Utilizadas
 
-In the project directory, you can run:
+- React 19.0.0
+- React Router 6.20.0
+- Axios 1.8.4
+- Jest e React Testing Library (testes)
+- CSS puro para estilização
+- API Backend Pexels ([via nosso backend personalizado](https://github.com/belarba/backend_fccn))
 
-### `npm start`
+## Pré-requisitos
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Node.js (v16 ou superior)
+- npm ou yarn
+- Git
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Configuração Inicial
 
-### `npm test`
+### 1. Clone o repositório
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/seu-usuario/frontend_fccn.git
+cd frontend_fccn
+```
 
-### `npm run build`
+### 2. Instale as dependências
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+# ou
+yarn install
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### 3. Configure as variáveis de ambiente
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-### `npm run eject`
+```
+REACT_APP_API_BASE_URL=endereço_do_servidor_do_backend
+REACT_APP_API_KEY=sua_backend_api_key_definida
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- `REACT_APP_API_BASE_URL`: URL base da API de backend
+- `REACT_APP_API_KEY`: Chave de autenticação para o backend
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Executando o Projeto
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Ambiente de Desenvolvimento
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Para iniciar o servidor em modo de desenvolvimento:
 
-## Learn More
+```bash
+npm start
+# ou
+yarn start
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+O aplicativo estará disponível em: http://localhost:3000 por padrão
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Build de Produção
 
-### Code Splitting
+Para gerar os arquivos de produção:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```bash
+npm run build
+# ou
+yarn build
+```
 
-### Analyzing the Bundle Size
+### Testes
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Para executar todos os testes:
 
-### Making a Progressive Web App
+```bash
+npm test
+# ou
+yarn test
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Para executar testes com cobertura:
 
-### Advanced Configuration
+```bash
+npm test -- --coverage
+# ou
+yarn test --coverage
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Estrutura do Projeto
 
-### Deployment
+O projeto segue uma arquitetura organizada com separação de responsabilidades:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- **src/components**: Componentes reutilizáveis da UI
+  - **/Filters**: Componentes de filtros e modos de visualização
+  - **/Header**: Cabeçalho da aplicação com busca
+  - **/Pagination**: Navegação entre páginas
+  - **/VideoDetail**: Reprodutor de vídeo e informações detalhadas
+  - **/VideoList**: Componentes de listagem de vídeos
+- **src/hooks**: Hooks personalizados React
+  - `useVideos.js`: Gerenciamento de estado e busca de vídeos
+  - `useVideoDetail.js`: Carregamento e manipulação de vídeos individuais
+  - `useMediaQuery.js`: Detecção de viewport para responsividade
+- **src/pages**: Componentes de páginas
+  - `HomePage.jsx`: Página principal com listagem de vídeos
+  - `VideoPage.jsx`: Página de detalhes do vídeo
+- **src/services**: Serviços e utilitários
+  - `api.js`: Funções para chamadas à API
+- **src/__tests__**: Arquivos de testes
 
-### `npm run build` fails to minify
+## Funcionalidades
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### Página Principal (Home)
+
+- Listagem de vídeos em grade (4 colunas) ou lista (1 coluna)
+- Busca por palavras-chave
+- Filtragem por resolução (HD, Full HD, 4K)
+- Paginação para navegação entre resultados
+- Layout responsivo para diferentes dispositivos
+
+### Página de Vídeo
+
+- Reprodução de vídeo com controles nativos
+- Seleção de qualidade do vídeo (quando disponível)
+- Exibição de metadados (autor, resolução, duração)
+- Layout responsivo para diferentes dispositivos
+
+## Integração com a API
+
+A aplicação se comunica com a API de backend que fornece acesso aos vídeos do Pexels. As chamadas à API são gerenciadas pelo serviço `api.js` usando Axios.
+
+### Endpoints Utilizados
+
+- **GET /videos**: Busca vídeos com opções de filtragem e paginação
+- **GET /videos/:id**: Obtém detalhes completos de um vídeo específico
+
+Consulte o README do backend para mais detalhes sobre a API.
+
+## Componentes e Hooks
+
+### Componentes Principais
+
+- **Header**: Navegação e busca
+- **VideoList**: Exibição de vídeos em grade ou lista
+- **VideoItem**: Card individual de vídeo
+- **VideoDetail**: Player e detalhes do vídeo
+- **Pagination**: Navegação entre páginas
+- **FilterComponent**: Filtros de resolução
+- **ViewModeFilter**: Alternância entre visualizações em grade e lista
+
+### Hooks Personalizados
+
+- **useVideos**: Gerencia o estado de busca, filtragem e paginação
+- **useVideoDetail**: Carrega dados de vídeos individuais e gerencia seleção de qualidade
+- **useMediaQuery**: Detecta o tamanho da tela para responsividade
+
+## Testes
+
+O projeto inclui testes para os principais componentes:
+
+- Testes de renderização para verificar se os componentes são exibidos corretamente
+- Testes de interação para verificar comportamentos de clique e navegação
+- Testes de integração para verificar o funcionamento conjunto dos componentes
+
+## Deployment
+
+### Opções de Hospedagem
+
+Os arquivos gerados pelo comando `build` podem ser hospedados em:
+
+- Serviços de hospedagem estática (Netlify, Vercel, GitHub Pages)
+- Servidores web tradicionais (Apache, Nginx)
+- Contêineres Docker
+
+### Procedimento de Deploy
+
+1. Gere os arquivos de build:
+   ```bash
+   npm run build
+   ```
+
+2. Faça o upload dos arquivos da pasta `build` para o servidor de hospedagem
+
+## Contribuindo
+
+1. Faça um fork do projeto
+2. Crie sua branch de feature (`git checkout -b feature/nome-da-feature`)
+3. Commit suas alterações (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nome-da-feature`)
+5. Crie um novo Pull Request
+
+## Licença
+
+Este projeto está licenciado sob a licença MIT - veja o arquivo LICENSE para mais detalhes.

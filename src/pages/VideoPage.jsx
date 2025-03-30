@@ -17,6 +17,7 @@ const VideoPage = () => {
   return (
     <div className="video-page-wrapper">
       <header className="app-header">
+        {/* No need to pass onSearch here, Header will handle navigation on its own */}
         <Header />
       </header>
       

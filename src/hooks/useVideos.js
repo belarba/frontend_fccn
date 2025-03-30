@@ -44,34 +44,38 @@ const useVideos = (initialParams = {}) => {
     loadVideos();
   }, [loadVideos]);
 
-  const updateSearchParams = (newParams, searchNow = true) => {
-    const updatedParams = {
-      ...searchParams,
-      ...newParams
-    };
+  const updateSearchParams = useCallback((newParams, resetPage = true) => {
+    setSearchParams(prevParams => {
+      const updatedParams = {
+        ...prevParams,
+        ...newParams
+      };
+      
+      return updatedParams;
+    });
     
-    setSearchParams(updatedParams);
-    
-    setPagination(prev => ({
-      ...prev,
-      page: 1
-    }));
-  };
+    if (resetPage) {
+      setPagination(prev => ({
+        ...prev,
+        page: 1
+      }));
+    }
+  }, []);
 
-  const setViewMode = (isGridView) => {
+  const setViewMode = useCallback((isGridView) => {
     setPagination(prev => ({
       ...prev,
       per_page: isGridView ? 16 : 10, // 16 para grade, 10 para lista
       page: 1
     }));
-  };
+  }, []);
 
-  const goToPage = (page) => {
+  const goToPage = useCallback((page) => {
     setPagination(prev => ({
       ...prev,
       page
     }));
-  };
+  }, []);
 
   return {
     videos,

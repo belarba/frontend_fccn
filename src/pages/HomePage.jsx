@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import FilterComponent from '../components/Filters/FilterComponent';
 import ViewModeFilter from '../components/Filters/ViewModeFilter';
@@ -8,6 +9,9 @@ import useVideos from '../hooks/useVideos';
 import './HomePage.css';
 
 const HomePage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialQuery = searchParams.get('q') || '';
+  
   const [isGridView, setIsGridView] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
   const [localResolution, setLocalResolution] = useState('');
@@ -19,17 +23,45 @@ const HomePage = () => {
     loading,
     error,
     pagination,
-    searchParams,
+    searchParams: apiSearchParams,
     updateSearchParams,
     setViewMode,
     goToPage
-  } = useVideos();
+  } = useVideos({ query: initialQuery });
+
+  // Effect to handle URL search parameter changes
+  useEffect(() => {
+    const urlQuery = searchParams.get('q') || '';
+    
+    // Check if we're at the root URL with no query params (e.g. after clicking logo)
+    const isCleanHomePage = window.location.pathname === '/' && 
+                           !window.location.search;
+    
+    if (isCleanHomePage && apiSearchParams.query) {
+      // Clear search if we're at home with no search params
+      updateSearchParams({ 
+        query: '',
+        size: localResolution
+      });
+    } else if (urlQuery !== apiSearchParams.query) {
+      // Update search if query parameter changed
+      updateSearchParams({ 
+        query: urlQuery,
+        size: localResolution
+      });
+    }
+  }, [searchParams, apiSearchParams.query, localResolution, updateSearchParams]);
 
   const handleSearch = (query) => {
+    // Update URL search params
+    setSearchParams(query ? { q: query } : {});
+    
+    // Update API search params
     updateSearchParams({ 
       query,
       size: localResolution
     });
+    
     setShowFilters(false); // Fechar o filtro ao fazer uma busca
   };
 
@@ -40,7 +72,7 @@ const HomePage = () => {
   const handleResolutionChange = (size) => {
     setLocalResolution(size);
     updateSearchParams({
-      ...searchParams,
+      ...apiSearchParams,
       size
     });
   };

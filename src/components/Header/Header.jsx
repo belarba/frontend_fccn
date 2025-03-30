@@ -8,10 +8,14 @@ const Header = ({ onSearch, onToggleFilters, filterButtonRef }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
+    
+    // If we're on the home page and onSearch is provided, use it
     if (onSearch) {
       onSearch(query);
     } else {
-      navigate('/');
+      // If we're on the video detail page or another page,
+      // navigate to the home page with the search query as a URL parameter
+      navigate(`/?q=${encodeURIComponent(query)}`);
     }
   };
 
@@ -25,7 +29,7 @@ const Header = ({ onSearch, onToggleFilters, filterButtonRef }) => {
   return (
     <div className="header">
       <div className="header-container">
-        <Link to="/" className="logo">
+        <Link to="/" className="logo" onClick={() => setQuery('')}>
           <div className="logo-icon">P</div>
           Pexels
         </Link>
@@ -42,14 +46,16 @@ const Header = ({ onSearch, onToggleFilters, filterButtonRef }) => {
             <button type="submit" className="search-button">
               <span role="img" aria-label="search">🔍</span>
             </button>
-            <button 
-              type="button" 
-              className="filter-button" 
-              onClick={handleFilterClick}
-              ref={filterButtonRef}
-            >
-              <span role="img" aria-label="filter">⚙️</span>
-            </button>
+            {onToggleFilters && (
+              <button 
+                type="button" 
+                className="filter-button" 
+                onClick={handleFilterClick}
+                ref={filterButtonRef}
+              >
+                <span role="img" aria-label="filter">⚙️</span>
+              </button>
+            )}
           </div>
         </form>
       </div>
