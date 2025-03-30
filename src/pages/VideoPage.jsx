@@ -7,11 +7,12 @@ import './VideoPage.css';
 
 const VideoPage = () => {
   const { id } = useParams();
+  const videoDetailHook = useVideoDetail(id);
   const { 
     video, 
     loading, 
     error
-  } = useVideoDetail(id);
+  } = videoDetailHook;
   
   return (
     <div className="video-page-wrapper">
@@ -30,7 +31,7 @@ const VideoPage = () => {
             <Link to="/" className="back-link">Voltar para a galeria</Link>
           </div>
         ) : (
-          <VideoDetail video={video} />
+          <VideoDetail video={video} videoDetailHook={videoDetailHook} />
         )}
       </main>
     </div>

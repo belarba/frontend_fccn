@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useIsMobile } from '../../hooks/useMediaQuery';
 import './VideoDetail.css';
+import './QualitySelector.css';
 
 const formatDuration = (seconds) => {
   const minutes = Math.floor(seconds / 60);
@@ -8,8 +9,11 @@ const formatDuration = (seconds) => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
-const VideoDetail = ({ video }) => {
+const VideoDetail = ({ video, videoDetailHook }) => {
   const isMobile = useIsMobile();
+  
+  // Usamos apenas o hook fornecido pelo componente pai
+  // Agora não estamos mais chamando useVideoDetail condicionalmente
   
   useEffect(() => {
     if (video) {
@@ -104,21 +108,50 @@ const VideoDetail = ({ video }) => {
 
   const videoFile = getVideoFile();
   
+  // Verificamos se o hook foi fornecido e tem as funções necessárias
+  const availableQualities = videoDetailHook?.getAvailableQualities ? 
+    videoDetailHook.getAvailableQualities() : [];
+  
+  const handleQualityChange = (e) => {
+    if (videoDetailHook?.setSelectedQuality) {
+      videoDetailHook.setSelectedQuality(e.target.value);
+    }
+  };
+  
   return (
     <div className="video-detail-container">
       <div className="container">
         <div className="video-player-wrapper">
           <div className="video-player-container">
             {videoFile && videoFile.link ? (
-              <video 
-                controls 
-                autoPlay={false}
-                className="video-player"
-                poster={video.video_pictures?.[0]?.picture}
-              >
-                <source src={videoFile.link} type="video/mp4" />
-                Seu navegador não suporta a reprodução de vídeos.
-              </video>
+              <>
+                <video 
+                  controls 
+                  autoPlay={false}
+                  className="video-player"
+                  poster={video.video_pictures?.[0]?.picture}
+                >
+                  <source src={videoFile.link} type="video/mp4" />
+                  Seu navegador não suporta a reprodução de vídeos.
+                </video>
+                
+                {videoDetailHook && availableQualities.length > 1 && (
+                  <div className="quality-selector">
+                    <label htmlFor="quality-select">Qualidade:</label>
+                    <select 
+                      id="quality-select"
+                      value={videoDetailHook.selectedQuality || ''}
+                      onChange={handleQualityChange}
+                    >
+                      {availableQualities.map(quality => (
+                        <option key={quality.value} value={quality.value}>
+                          {quality.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+              </>
             ) : (
               <div className="video-error">
                 <div className="play-placeholder">

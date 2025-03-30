@@ -1,0 +1,57 @@
+.quality-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.3s ease;
+}
+
+.video-player-container:not(:hover) .quality-selector {
+  opacity: 0.4;
+}
+
+.quality-selector label {
+  margin-right: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.quality-selector select {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #4AA081;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.quality-selector select:focus {
+  outline: none;
+  border-color: #fff;
+}
+
+.quality-selector select option {
+  background-color: #333;
+}
+
+/* For mobile screens */
+@media (max-width: 768px) {
+  .quality-selector {
+    padding: 3px;
+  }
+  
+  .quality-selector label {
+    font-size: 0.75rem;
+  }
+  
+  .quality-selector select {
+    font-size: 0.75rem;
+    padding: 2px 5px;
+  }
+}
