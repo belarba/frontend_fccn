@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './Header.css';
 
 const Header = ({ onSearch, onToggleFilters, filterButtonRef }) => {
-  const [query, setQuery] = useState('');
-  const navigate = useNavigate();
+  // Use o sessionStorage para persistir o termo de busca entre páginas
+  const [query, setQuery] = useState(() => {
+    // Inicializa com o valor do sessionStorage, se existir
+    return sessionStorage.getItem('lastSearchQuery') || '';
+  });
 
   const handleSearch = (e) => {
     e.preventDefault();
     
-    // If we're on the home page and onSearch is provided, use it
-    if (onSearch) {
-      onSearch(query);
-    } else {
-      // If we're on the video detail page or another page,
-      // navigate to the home page with the search query as a URL parameter
-      navigate(`/?q=${encodeURIComponent(query)}`);
-    }
+    // Salva a consulta no sessionStorage
+    sessionStorage.setItem('lastSearchQuery', query);
+    
+    // Agora sempre usamos onSearch, pois ela é fornecida por todas as páginas
+    onSearch(query);
   };
 
   const handleFilterClick = (e) => {
@@ -26,10 +26,15 @@ const Header = ({ onSearch, onToggleFilters, filterButtonRef }) => {
     }
   };
 
+  const handleLogoClick = () => {
+    setQuery('');
+    sessionStorage.removeItem('lastSearchQuery');
+  };
+
   return (
     <div className="header">
       <div className="header-container">
-        <Link to="/" className="logo" onClick={() => setQuery('')}>
+        <Link to="/" className="logo" onClick={handleLogoClick}>
           <div className="logo-icon">P</div>
           Pexels
         </Link>
