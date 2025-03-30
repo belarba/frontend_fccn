@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useIsMobile } from '../../hooks/useMediaQuery';
 import './VideoDetail.css';
 import './QualitySelector.css';
@@ -15,20 +15,6 @@ const VideoDetail = ({ video, videoDetailHook }) => {
   // Usamos apenas o hook fornecido pelo componente pai
   // Agora não estamos mais chamando useVideoDetail condicionalmente
   
-  useEffect(() => {
-    if (video) {
-      console.log('VIDEO OBJECT STRUCTURE:', {
-        has_video_files: !!video.video_files,
-        video_files_type: typeof video.video_files,
-        is_array: Array.isArray(video.video_files),
-        keys: !Array.isArray(video.video_files) && typeof video.video_files === 'object' 
-          ? Object.keys(video.video_files) 
-          : 'N/A',
-        length: Array.isArray(video.video_files) ? video.video_files.length : 'N/A'
-      });
-    }
-  }, [video]);
-  
   if (!video) {
     return (
       <div className="video-detail-container loading">
@@ -40,20 +26,16 @@ const VideoDetail = ({ video, videoDetailHook }) => {
   // Função para obter o vídeo com a qualidade correta
   const getVideoFile = () => {
     if (!video.video_files) {
-      console.log('No video_files property found');
       return null;
     }
     
     // Qualidade desejada com base no dispositivo
     const desiredQuality = isMobile ? 'sd' : 'hd';
-    console.log('Desired quality:', desiredQuality);
     
     let videoFile = null;
     
     // Caso 1: video_files é um array
     if (Array.isArray(video.video_files)) {
-      console.log('video_files is array with length:', video.video_files.length);
-      
       // Procurar por qualidade específica
       videoFile = video.video_files.find(file => 
         file.quality && file.quality.toLowerCase() === desiredQuality
@@ -62,17 +44,13 @@ const VideoDetail = ({ video, videoDetailHook }) => {
       // Se não encontrar, usar o primeiro
       if (!videoFile && video.video_files.length > 0) {
         videoFile = video.video_files[0];
-        console.log('Using first video file as fallback');
       }
     } 
     // Caso 2: video_files é um objeto
     else if (typeof video.video_files === 'object') {
-      console.log('video_files is object with keys:', Object.keys(video.video_files));
-      
       // Tentar pegar diretamente a qualidade desejada
       if (video.video_files[desiredQuality]) {
         videoFile = video.video_files[desiredQuality];
-        console.log('Found quality in object format');
       } 
       // Alternativa: tentar outras qualidades
       else {
@@ -80,7 +58,6 @@ const VideoDetail = ({ video, videoDetailHook }) => {
         for (const quality of qualities) {
           if (video.video_files[quality]) {
             videoFile = video.video_files[quality];
-            console.log('Using alternative quality:', quality);
             break;
           }
         }
@@ -90,7 +67,6 @@ const VideoDetail = ({ video, videoDetailHook }) => {
           const firstKey = Object.keys(video.video_files)[0];
           if (firstKey) {
             videoFile = video.video_files[firstKey];
-            console.log('Using first key as last resort:', firstKey);
           }
         }
       }
@@ -98,11 +74,9 @@ const VideoDetail = ({ video, videoDetailHook }) => {
     
     // Se o videoFile for um array (caso de objeto aninhado), pegue o primeiro item
     if (Array.isArray(videoFile)) {
-      console.log('videoFile is an array, extracting first item');
       videoFile = videoFile[0];
     }
     
-    console.log('Selected video file:', videoFile);
     return videoFile;
   };
 
