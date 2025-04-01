@@ -40,11 +40,30 @@ Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```
 REACT_APP_API_BASE_URL=endereço_do_servidor_do_backend
-REACT_APP_API_KEY=sua_backend_api_key_definida
+REACT_APP_FRONTEND_PASSWORD=senha_para_autenticacao_frontend
 ```
 
 - `REACT_APP_API_BASE_URL`: URL base da API de backend
-- `REACT_APP_API_KEY`: Chave de autenticação para o backend
+- `REACT_APP_FRONTEND_PASSWORD`: Senha usada para autenticação frontend-backend (deve corresponder à senha configurada no backend)
+
+## Mecanismo de Segurança
+
+Esta aplicação utiliza um mecanismo de autenticação baseado em sessão para se comunicar com o backend, em vez de expor tokens de API nos headers. Isso proporciona maior segurança, mantendo as chaves de API da Pexels protegidas no servidor backend.
+
+### Como funciona:
+
+1. Ao iniciar, o frontend se autentica no backend usando uma senha compartilhada
+2. O backend cria uma sessão e retorna um cookie de sessão
+3. Todas as requisições subsequentes usam este cookie para autenticação
+4. A chave da API Pexels permanece exclusivamente no backend
+
+### Configuração do Backend:
+
+No backend Ruby on Rails, é necessário:
+
+1. Configurar uma rota de autenticação (`/api/v1/auth/session`)
+2. Implementar CORS com suporte a credenciais para domínios específicos
+3. Armazenar a senha de acesso frontend em uma variável de ambiente (`FRONTEND_ACCESS_PASSWORD`)
 
 ## Executando o Projeto
 
@@ -106,7 +125,7 @@ O projeto segue uma arquitetura organizada com separação de responsabilidades:
   - `HomePage.jsx`: Página principal com listagem de vídeos
   - `VideoPage.jsx`: Página de detalhes do vídeo
 - **src/services**: Serviços e utilitários
-  - `api.js`: Funções para chamadas à API
+  - `api.js`: Funções para chamadas à API com lógica de autenticação
 - **src/__tests__**: Arquivos de testes
 
 ## Funcionalidades
@@ -132,8 +151,9 @@ A aplicação se comunica com a API de backend que fornece acesso aos vídeos do
 
 ### Endpoints Utilizados
 
-- **GET /videos**: Busca vídeos com opções de filtragem e paginação
-- **GET /videos/:id**: Obtém detalhes completos de um vídeo específico
+- **GET /api/v1/videos**: Busca vídeos com opções de filtragem e paginação
+- **GET /api/v1/videos/:id**: Obtém detalhes completos de um vídeo específico
+- **POST /api/v1/auth/session**: Autentica o frontend com o backend
 
 Consulte o README do backend para mais detalhes sobre a API.
 
@@ -162,6 +182,7 @@ O projeto inclui testes para os principais componentes:
 - Testes de renderização para verificar se os componentes são exibidos corretamente
 - Testes de interação para verificar comportamentos de clique e navegação
 - Testes de integração para verificar o funcionamento conjunto dos componentes
+- Mocks para autenticação e interações com a API
 
 ## Deployment
 

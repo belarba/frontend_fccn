@@ -9,11 +9,13 @@ const formatDuration = (seconds) => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 };
 
-const VideoDetail = ({ video, videoDetailHook }) => {
+const VideoDetail = ({ 
+  video, 
+  availableQualities = [],
+  selectedQuality = '', 
+  onQualityChange 
+}) => {
   const isMobile = useIsMobile();
-  
-  // Usamos apenas o hook fornecido pelo componente pai
-  // Agora não estamos mais chamando useVideoDetail condicionalmente
   
   if (!video) {
     return (
@@ -30,7 +32,7 @@ const VideoDetail = ({ video, videoDetailHook }) => {
     }
     
     // Qualidade desejada com base no dispositivo
-    const desiredQuality = isMobile ? 'sd' : 'hd';
+    const desiredQuality = selectedQuality || (isMobile ? 'sd' : 'hd');
     
     let videoFile = null;
     
@@ -82,13 +84,9 @@ const VideoDetail = ({ video, videoDetailHook }) => {
 
   const videoFile = getVideoFile();
   
-  // Verificamos se o hook foi fornecido e tem as funções necessárias
-  const availableQualities = videoDetailHook?.getAvailableQualities ? 
-    videoDetailHook.getAvailableQualities() : [];
-  
   const handleQualityChange = (e) => {
-    if (videoDetailHook?.setSelectedQuality) {
-      videoDetailHook.setSelectedQuality(e.target.value);
+    if (onQualityChange) {
+      onQualityChange(e.target.value);
     }
   };
   
@@ -109,12 +107,12 @@ const VideoDetail = ({ video, videoDetailHook }) => {
                   Seu navegador não suporta a reprodução de vídeos.
                 </video>
                 
-                {videoDetailHook && availableQualities.length > 1 && (
+                {availableQualities.length > 1 && (
                   <div className="quality-selector">
                     <label htmlFor="quality-select">Qualidade:</label>
                     <select 
                       id="quality-select"
-                      value={videoDetailHook.selectedQuality || ''}
+                      value={selectedQuality || ''}
                       onChange={handleQualityChange}
                     >
                       {availableQualities.map(quality => (
