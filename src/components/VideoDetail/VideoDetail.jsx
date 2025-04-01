@@ -136,7 +136,8 @@ const VideoDetail = ({
         </div>
         
         <div className="video-detail-info">
-          <h1 className="video-detail-title">{video.user_name || 'Nome do autor'}</h1>
+          {console.log(video)}
+          <h1 className="video-detail-title">{video.user.name}</h1>
           
           <ul className="video-metadata-list">
             <li className="video-metadata-item">
