@@ -57,14 +57,6 @@ Esta aplicação utiliza um mecanismo de autenticação baseado em sessão para 
 3. Todas as requisições subsequentes usam este cookie para autenticação
 4. A chave da API Pexels permanece exclusivamente no backend
 
-### Configuração do Backend:
-
-No backend Ruby on Rails, é necessário:
-
-1. Configurar uma rota de autenticação (`/api/v1/auth/session`)
-2. Implementar CORS com suporte a credenciais para domínios específicos
-3. Armazenar a senha de acesso frontend em uma variável de ambiente (`FRONTEND_ACCESS_PASSWORD`)
-
 ## Executando o Projeto
 
 ### Ambiente de Desenvolvimento
